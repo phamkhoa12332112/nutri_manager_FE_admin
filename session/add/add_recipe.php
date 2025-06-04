@@ -1,42 +1,49 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Kiểm tra dữ liệu đầu vào
-    if (empty($recipeData['name'])) {
+    // Kiểm tra tên và mô tả
+    if (empty($_POST['name'])) {
         echo "<script>alert('Tên món ăn không được để trống!'); window.history.back();</script>";
         exit;
     }
-
-    if (empty($recipeData['description'])) {
+    if (empty($_POST['description'])) {
         echo "<script>alert('Mô tả món ăn không được để trống!'); window.history.back();</script>";
         exit;
     }
 
-    if (empty($recipeData['imageUrl'])) {
-        echo "<script>alert('Hình ảnh không được để trống!'); window.history.back();</script>";
+    // Kiểm tra hình ảnh
+    if (!isset($_FILES['imageUrl']) || $_FILES['imageUrl']['error'] !== UPLOAD_ERR_OK) {
+        echo "<script>alert('Hình ảnh không được để trống hoặc bị lỗi!'); window.history.back();</script>";
         exit;
     }
 
-    if (empty($recipeData['ingredients']) || !is_array($recipeData['ingredients'])) {
+    // Kiểm tra nguyên liệu
+    if (empty($_POST['ingredients']) || !is_array($_POST['ingredients'])) {
         echo "<script>alert('Phải chọn ít nhất một nguyên liệu!'); window.history.back();</script>";
         exit;
     }
+    // Kiểm tra từng nguyên liệu có id và quantity
+    foreach ($_POST['ingredients'] as $ingredient) {
+        if (empty($ingredient['id']) || $ingredient['quantity'] === '' || $ingredient['quantity'] <= 0) {
+            echo "<script>alert('Vui lòng nhập đầy đủ nguyên liệu và số lượng hợp lệ!'); window.history.back();</script>";
+            exit;
+        }
+    }
 
-    if (empty($recipeData['meals']) || !is_array($recipeData['meals'])) {
+    // Kiểm tra bữa ăn
+    if (empty($_POST['meals']) || !is_array($_POST['meals'])) {
         echo "<script>alert('Phải chọn ít nhất một bữa ăn!'); window.history.back();</script>";
         exit;
     }
-
-    // Lấy dữ liệu từ form
-    $recipeData = [
-        'name' => trim($_POST['name'] ?? ''),
-        'description' => trim($_POST['description'] ?? ''),
-        'ingredients' => $_POST['ingredients'] ?? [],
-        'meals' => $_POST['meals'] ?? [],
-    ];
+    foreach ($_POST['meals'] as $meal) {
+        if (empty($meal['id'])) {
+            echo "<script>alert('Vui lòng chọn bữa ăn hợp lệ!'); window.history.back();</script>";
+            exit;
+        }
+    }
 
     // Tính tổng calo từ nguyên liệu
     $totalCalories = 0;
-    foreach ($recipeData['ingredients'] as $ingredient) {
+    foreach ($_POST['ingredients'] as $ingredient) {
         $ingredientId = $ingredient['id']; // Lấy ID nguyên liệu
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "http://localhost:3003/ingredients/$ingredientId");
@@ -62,10 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $totalCalories += $calories * $quantity;
     }
 
-    if (isset($_FILES['imageFile']) && $_FILES['imageFile']['error'] === UPLOAD_ERR_OK) {
-        $filePath = $_FILES['imageFile']['tmp_name'];
-        $fileName = $_FILES['imageFile']['name'];
-        $fileType = $_FILES['imageFile']['type'];
+    if (isset($_FILES['imageUrl']) && $_FILES['imageUrl']['error'] === UPLOAD_ERR_OK) {
+        $filePath = $_FILES['imageUrl']['tmp_name'];
+        $fileName = $_FILES['imageUrl']['name'];
+        $fileType = $_FILES['imageUrl']['type'];
 
         // Tạo dữ liệu form-data
         $data = [
@@ -91,12 +98,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Xử lý phản hồi từ API
         if ($response) {
             $responseData = json_decode($response, true);
-            if (isset($responseData['data']) && $responseData['stateCode'] === 200) {
+            if (isset($responseData['data']) && $responseData['statusCode'] === 200) {
                 
                 // Chuẩn bị dữ liệu gửi qua API
                 $apiData = [
-                    'name' => $recipeData['name'],
-                    'description' => $recipeData['description'],
+                    'name' => $_POST['name'],
+                    'description' => $_POST['description'],
                     'totalCalories' => $totalCalories,
                     // Giả sử bạn có URL sau khi upload ảnh
                     'imageUrl' => $responseData['data']['url'] ?? '',
@@ -105,12 +112,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'id' => (int)$ingredient['id'],
                             'quantity' => (float)($ingredient['quantity'] ?? 1),
                         ];
-                    }, $recipeData['ingredients']),
+                    }, $_POST['ingredients']),
                     'meals' => array_map(function ($meal) {
                         return [
                             'id' => (int)$meal['id'],
                         ];
-                    }, $recipeData['meals']),
+                    }, $_POST['meals']),
                 ];
 
                 // Gửi dữ liệu qua API
@@ -139,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Xử lý phản hồi từ API
                 if ($response) {
                     $data = json_decode($response, true);
-                    if (isset($data['stateCode']) && $data['stateCode'] === 200) {
+                    if (isset($data['data']) && $data['statusCode'] === 200) {
                         echo "<script>alert('Thêm món ăn thành công!'); window.location.href='/testphp/admin/index.php?action=recipes';</script>";
                         exit;
                     } else {

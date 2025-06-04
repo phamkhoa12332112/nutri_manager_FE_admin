@@ -1,19 +1,36 @@
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $ingredientId = $_POST['id'] ?? null;
+    $recipeId = $_POST['id'] ?? null;
     $name = $_POST['name'] ?? '';
-    $unit = $_POST['unit'] ?? '';
-    $protein = $_POST['protein'] !== '' ? floatval($_POST['protein']) : null;
-    $fat = $_POST['fat'] !== '' ? floatval($_POST['fat']) : null;
-    $carbs = $_POST['carbs'] !== '' ? floatval($_POST['carbs']) : null;
-    $fiber = $_POST['fiber'] !== '' ? floatval($_POST['fiber']) : null;
+    $description = $_POST['description'] ?? '';
 
-    if (!$ingredientId) {
-        echo "<script>alert('Thiếu ID nguyên liệu để cập nhật.'); window.history.back();</script>";
-        exit;
+    // Lấy danh sách nguyên liệu
+    $ingredients = [];
+    if (isset($_POST['ingredients']) && is_array($_POST['ingredients'])) {
+        foreach ($_POST['ingredients'] as $item) {
+            if (!empty($item['id']) && isset($item['quantity'])) {
+                $ingredients[] = [
+                    'id' => intval($item['id']),
+                    'quantity' => floatval($item['quantity'])
+                ];
+            }
+        }
     }
 
+    // Lấy danh sách bữa ăn
+    $meals = [];
+    if (isset($_POST['meals']) && is_array($_POST['meals'])) {
+        foreach ($_POST['meals'] as $item) {
+            if (!empty($item['id'])) {
+                $meals[] = [
+                    'id' => intval($item['id'])
+                ];
+            }
+        }
+    }
+    
+    // Xử lý ảnh nếu có upload
     $imageUrl = null;
     if (isset($_FILES['imageFile']) && $_FILES['imageFile']['error'] === UPLOAD_ERR_OK) {
         $filePath = $_FILES['imageFile']['tmp_name'];
@@ -53,27 +70,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Tính calories nếu có đủ dữ liệu
-    $calories = 0;
-    if ($protein !== null) $calories += $protein * 4;
-    if ($carbs !== null) $calories += $carbs * 4;
-    if ($fat !== null) $calories += $fat * 9;
-
-    // Xây dựng mảng dữ liệu động
-    $ingredientData = [
+    // Chuẩn bị dữ liệu gửi API
+    $recipeData = [
         'name' => $name,
-        'unit' => $unit,
-        'calories' => $calories !== 0 ? $calories : null,
-        'protein' => $protein,
-        'fat' => $fat,
-        'carbs' => $carbs,
-        'fiber' => $fiber,
-        'imageUrl' => !empty($imageUrl) ? $imageUrl : null
+        'description' => $description,
+        'ingredients' => $ingredients,
+        'meals' => $meals
     ];
+    if ($imageUrl) $recipeData['imageUrl'] = $imageUrl;
 
-    // Lọc bỏ các trường null/rỗng
-    $ingredientData = array_filter(
-        $ingredientData,
+    // Loại bỏ các trường rỗng/null/array rỗng
+    $recipeData = array_filter(
+        $recipeData,
         function ($v) {
             if (is_array($v)) return count($v) > 0;
             return $v !== null && $v !== '';
@@ -82,11 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $ch = curl_init();
 
-    curl_setopt($ch, CURLOPT_URL, "http://localhost:3003/ingredients/" . $ingredientId);
+    curl_setopt($ch, CURLOPT_URL, "http://localhost:3003/recipes/" . $recipeId);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    $payload = json_encode($ingredientData);
+    $payload = json_encode($recipeData);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
@@ -104,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     curl_close($ch);
 
     if ($httpCode === 200) {
-        echo "<script>alert('Cập nhật thành công!'); window.location.href='/testphp/admin/index.php?action=ingredients';</script>";
+        echo "<script>alert('Cập nhật thành công!'); window.location.href='/testphp/admin/index.php?action=recipes';</script>";
         exit;
     } else {
         echo "<script>alert('Cập nhật thất bại: " . ($response ? $response : 'Không rõ lỗi') . "'); window.history.back();</script>";

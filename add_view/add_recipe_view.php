@@ -443,8 +443,8 @@
                             <!-- Hình ảnh -->
                             <div class="form-group">
                                 <label for="imageUrl">Hình ảnh</label>
-                                <input type="file" id="imageUrl" class="form-control" name="imageUrl" accept="image/*"
-                                    required>
+                                <input type="file" id="imageUrl" class="form-control" name="imageUrl"
+                                    accept="image/jpeg,image/png" required>
                             </div>
 
                             <!-- Nguyên liệu -->
@@ -734,7 +734,45 @@
         }
     });
     </script>
+    <script>
+    let ingredientIndex = 1;
 
+    // Thêm nguyên liệu
+    document.getElementById('add-ingredient').addEventListener('click', function() {
+        const container = document.getElementById('ingredients-container');
+        const row = document.createElement('div');
+        row.className = 'ingredient-row d-flex align-items-center mb-3';
+
+        row.innerHTML = `
+        <div class="form-group mr-3">
+            <label for="ingredient_${ingredientIndex}">Tên nguyên liệu:</label>
+            <select class="form-control" name="ingredients[${ingredientIndex}][id]" required>
+                <option value="">Chọn nguyên liệu</option>
+                <?php foreach ($ingredients as $ingredient): ?>
+                <option value="<?php echo $ingredient['id']; ?>">
+                    <?php echo $ingredient['name']; ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="form-group mr-3">
+            <label for="quantity_${ingredientIndex}">Số lượng</label>
+            <input type="number" class="form-control" name="ingredients[${ingredientIndex}][quantity]" placeholder="Nhập số lượng" required>
+        </div>
+        <button type="button" class="btn btn-danger btn-sm remove-ingredient">Xóa</button>
+    `;
+
+        container.appendChild(row);
+        ingredientIndex++;
+    });
+
+    // Xóa nguyên liệu
+    document.getElementById('ingredients-container').addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-ingredient')) {
+            e.target.closest('.ingredient-row').remove();
+        }
+    });
+    </script>
 
 </body>
 

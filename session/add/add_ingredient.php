@@ -1,5 +1,6 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
  // Kiểm tra dữ liệu đầu vào
      if (empty($_POST['name'])) {
     echo "<script>alert('Tên nguyên liệu không được để trống!'); window.history.back();</script>";
@@ -78,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $data = json_decode($response, true);
                     if (isset($data['data']) && $data['statusCode'] === 200) {
                         echo "<script>alert('Thêm nguyên liệu thành công!'); window.location.href='/testphp/admin/index.php?action=ingredients';</script>";
+                    
                         exit;
                     } else {
                         echo "<script>alert('Lỗi khi thêm nguyên liệu: " . ($data['msg'] ?? 'Không rõ lỗi') . "'); window.history.back();</script>";

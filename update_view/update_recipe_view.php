@@ -14,23 +14,23 @@ $recipe = $recipeModel->getDetailsById($id);
     <!-- Fonts and icons -->
     <script src="assets/js/plugin/webfont/webfont.min.js"></script>
     <script>
-        WebFont.load({
-            google: {
-                families: ["Poppins:300,400,500,600,700"]
-            },
-            custom: {
-                families: [
-                    "Font Awesome 5 Solid",
-                    "Font Awesome 5 Regular",
-                    "Font Awesome 5 Brands",
-                    "simple-line-icons",
-                ],
-                urls: ["assets/css/fonts.min.css"],
-            },
-            active: function () {
-                sessionStorage.fonts = true;
-            },
-        });
+    WebFont.load({
+        google: {
+            families: ["Poppins:300,400,500,600,700"]
+        },
+        custom: {
+            families: [
+                "Font Awesome 5 Solid",
+                "Font Awesome 5 Regular",
+                "Font Awesome 5 Brands",
+                "simple-line-icons",
+            ],
+            urls: ["assets/css/fonts.min.css"],
+        },
+        active: function() {
+            sessionStorage.fonts = true;
+        },
+    });
     </script>
 
     <!-- CSS Files -->
@@ -423,13 +423,13 @@ $recipe = $recipeModel->getDetailsById($id);
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
-                            Thêm
+                            Chỉnh sửa
                             </li>
                         </ul>
                     </div>
                     <div class="card-body">
                         <!-- filepath: /Applications/XAMPP/xamppfiles/htdocs/testPHP/admin/add_view/add_recipe_view.php -->
-                        <form method="POST" action="session/update/update_recipe.php" enctype="multipart/form-data">
+                        <form method="POST" action="session/edit/edit_recipe.php" enctype="multipart/form-data">
                             <!-- ID món ăn (ẩn) -->
                             <input type="hidden" name="id" value="<?php echo htmlspecialchars($recipe['id']); ?>">
 
@@ -447,45 +447,50 @@ $recipe = $recipeModel->getDetailsById($id);
                                     required><?php echo htmlspecialchars($recipe['description']); ?></textarea>
                             </div>
 
-                            <!-- Hình ảnh -->
                             <div class="form-group mt-3">
-                                <label for="imageUrl">Hình ảnh</label>
-                                <input type="file" id="imageUrl" class="form-control" name="imageFile" accept="image/*">
-                                <!-- Hiển thị hình ảnh hiện tại -->
+                                <label>Ảnh hiện tại</label><br>
                                 <?php if (!empty($recipe['imageUrl'])): ?>
-                                    <img src="<?php echo htmlspecialchars($recipe['imageUrl']); ?>" alt="Hình ảnh món ăn"
-                                        class="img-thumbnail mt-2" width="200">
+                                <img src="<?= htmlspecialchars($recipe['imageUrl']) ?>" alt="Ảnh món ăn"
+                                    style="max-width: 120px; max-height: 120px;">
+                                <?php else: ?>
+                                Không có ảnh
                                 <?php endif; ?>
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label for="imageFile">Chọn Hình Ảnh Mới (nếu muốn thay đổi)</label>
+                                <input type="file" id="imageFile" class="form-control" name="imageFile"
+                                    accept="image/jpeg,image/png">
                             </div>
 
                             <!-- Nguyên liệu -->
                             <div class="form-group mt-3">
                                 <label>Nguyên liệu</label>
                                 <div id="ingredients-container">
-                                    <?php foreach ($recipe['ingredients'] as $index => $ingredient): ?>
-                                        <div class="ingredient-row d-flex align-items-center mb-3">
-                                            <div class="form-group mr-3">
-                                                <label for="ingredient_<?php echo $index; ?>">Tên nguyên liệu:</label>
-                                                <select class="form-control" name="ingredients[<?php echo $index; ?>][id]"
-                                                    required>
-                                                    <option value="">Chọn nguyên liệu</option>
-                                                    <?php foreach ($ingredients as $availableIngredient): ?>
-                                                        <option value="<?php echo $availableIngredient['id']; ?>" <?php echo $availableIngredient['id'] == $ingredient['id'] ? 'selected' : ''; ?>>
-                                                            <?php echo $availableIngredient['name']; ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                            </div>
-                                            <div class="form-group mr-3">
-                                                <label for="quantity_<?php echo $index; ?>">Số lượng</label>
-                                                <input type="number" class="form-control"
-                                                    name="ingredients[<?php echo $index; ?>][quantity]"
-                                                    value="<?php echo htmlspecialchars($ingredient['quantity']); ?>"
-                                                    required>
-                                            </div>
-                                            <button type="button"
-                                                class="btn btn-danger btn-sm remove-ingredient">Xóa</button>
+                                    <?php foreach ($recipe['items'] as $index => $item): ?>
+                                    <div class="ingredient-row d-flex align-items-center mb-3">
+                                        <div class="form-group mr-3 mb-0">
+                                            <label for="ingredient_<?php echo $index; ?>">Tên nguyên liệu:</label>
+                                            <select class="form-control" name="ingredients[<?php echo $index; ?>][id]"
+                                                required>
+                                                <option value="">Chọn nguyên liệu</option>
+                                                <?php foreach ($ingredients as $ingredient): ?>
+                                                <option value="<?php echo $ingredient['id']; ?>"
+                                                    <?php echo $ingredient['id'] == $item['ingredient']['id'] ? 'selected' : ''; ?>>
+                                                    <?php echo $ingredient['name']; ?>
+                                                </option>
+                                                <?php endforeach; ?>
+                                            </select>
                                         </div>
+                                        <div class="form-group mr-3 mb-0">
+                                            <label for="quantity_<?php echo $index; ?>">Số lượng</label>
+                                            <input type="number" class="form-control"
+                                                name="ingredients[<?php echo $index; ?>][quantity]"
+                                                value="<?php echo htmlspecialchars($item['quantity']); ?>" required>
+                                        </div>
+                                        <button type="button"
+                                            class="btn btn-danger btn-sm remove-ingredient mt-4">Xóa</button>
+                                    </div>
                                     <?php endforeach; ?>
                                 </div>
                                 <button type="button" id="add-ingredient" class="btn btn-success btn-sm mt-3">Thêm
@@ -496,22 +501,24 @@ $recipe = $recipeModel->getDetailsById($id);
                             <div class="form-group mt-3">
                                 <label>Bữa ăn</label>
                                 <div id="meals-container">
-                                    <?php foreach ($recipe['meals'] as $index => $meal): ?>
-                                        <div class="meal-row d-flex align-items-center mb-3">
-                                            <div class="form-group mr-3">
-                                                <label for="meal_<?php echo $index; ?>">Tên bữa ăn:</label>
-                                                <select class="form-control" name="meals[<?php echo $index; ?>][id]"
-                                                    required>
-                                                    <option value="">Chọn bữa ăn</option>
-                                                    <?php foreach ($meals as $availableMeal): ?>
-                                                        <option value="<?php echo $availableMeal['meal']['id']; ?>" <?php echo $availableMeal['meal']['id'] == $meal['id'] ? 'selected' : ''; ?>>
-                                                            <?php echo $availableMeal['meal']['name']; ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                            </div>
-                                            <button type="button" class="btn btn-danger btn-sm remove-meal">Xóa</button>
+                                    <?php foreach ($recipe['mealItems'] as $index => $mealItem): ?>
+                                    <div class="meal-row d-flex align-items-center mb-3">
+                                        <div class="form-group mr-3 mb-0">
+                                            <label for="meal_<?php echo $index; ?>">Tên bữa ăn:</label>
+                                            <select class="form-control" name="meals[<?php echo $index; ?>][id]"
+                                                required>
+                                                <option value="">Chọn bữa ăn</option>
+                                                <?php foreach ($meals as $meal): ?>
+                                                <option value="<?php echo $meal['meal']['id']; ?>"
+                                                    <?php echo $meal['meal']['id'] == $mealItem['meal']['id'] ? 'selected' : ''; ?>>
+                                                    <?php echo $meal['meal']['name']; ?>
+                                                </option>
+                                                <?php endforeach; ?>
+                                            </select>
                                         </div>
+                                        <button type="button"
+                                            class="btn btn-danger btn-sm remove-meal mt-4">Xóa</button>
+                                    </div>
                                     <?php endforeach; ?>
                                 </div>
                                 <button type="button" id="add-meal" class="btn btn-success btn-sm mt-3">Thêm bữa
@@ -614,120 +621,116 @@ $recipe = $recipeModel->getDetailsById($id);
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="assets/js/setting-demo2.js"></script>
     <script>
-        $(document).ready(function () {
-            $("#basic-datatables").DataTable({});
+    $(document).ready(function() {
+        $("#basic-datatables").DataTable({});
 
-            $("#multi-filter-select").DataTable({
-                pageLength: 5,
-                initComplete: function () {
-                    this.api()
-                        .columns()
-                        .every(function () {
-                            var column = this;
-                            var select = $(
+        $("#multi-filter-select").DataTable({
+            pageLength: 5,
+            initComplete: function() {
+                this.api()
+                    .columns()
+                    .every(function() {
+                        var column = this;
+                        var select = $(
                                 '<select class="form-select"><option value=""></option></select>'
                             )
-                                .appendTo($(column.footer()).empty())
-                                .on("change", function () {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            .appendTo($(column.footer()).empty())
+                            .on("change", function() {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
-                                    column
-                                        .search(val ? "^" + val + "$" : "", true, false)
-                                        .draw();
-                                });
+                                column
+                                    .search(val ? "^" + val + "$" : "", true, false)
+                                    .draw();
+                            });
 
-                            column
-                                .data()
-                                .unique()
-                                .sort()
-                                .each(function (d, j) {
-                                    select.append(
-                                        '<option value="' + d + '">' + d + "</option>"
-                                    );
-                                });
-                        });
-                },
-            });
-
-            // Add Row
-            $("#add-row").DataTable({
-                pageLength: 5,
-            });
-
-            var action =
-                '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
-            $("#addRowButton").click(function () {
-                $("#add-row")
-                    .dataTable()
-                    .fnAddData([
-                        $("#addName").val(),
-                        $("#addPosition").val(),
-                        $("#addOffice").val(),
-                        action,
-                    ]);
-                $("#addRowModal").modal("hide");
-            });
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function(d, j) {
+                                select.append(
+                                    '<option value="' + d + '">' + d + "</option>"
+                                );
+                            });
+                    });
+            },
         });
+
+        // Add Row
+        $("#add-row").DataTable({
+            pageLength: 5,
+        });
+
+        var action =
+            '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+
+        $("#addRowButton").click(function() {
+            $("#add-row")
+                .dataTable()
+                .fnAddData([
+                    $("#addName").val(),
+                    $("#addPosition").val(),
+                    $("#addOffice").val(),
+                    action,
+                ]);
+            $("#addRowModal").modal("hide");
+        });
+    });
     </script>
 
 
     <!-- thêm biến thể -->
+    // ...existing code...
     <script>
-        let variationIndex = 1;
+    let ingredientIndex = <?php echo count($recipe['items']); ?>;
 
-        document.getElementById('add-variation').addEventListener('click', function () {
-            const container = document.getElementById('variations-container');
-            const row = document.createElement('div');
-            row.className = 'variation-row d-flex align-items-center mb-3';
+    // Thêm nguyên liệu mới
+    document.getElementById('add-ingredient').addEventListener('click', function() {
+        const container = document.getElementById('ingredients-container');
+        const row = document.createElement('div');
+        row.className = 'ingredient-row d-flex align-items-center mb-3';
 
-            row.innerHTML = `
-    <!-- Nguyên liệu -->
-    <div class="form-group mr-3">
-        <label for="ingredient_${variationIndex}">Tên nguyên liệu:</label>
-        <select class="form-control" name="variations[${variationIndex}][ingredient]">
-            <option value="">Chọn nguyên liệu</option>
-            <?php foreach ($ingredients as $ingredient): ?>
-            <option value="<?php echo $ingredient['id']; ?>">
-                <?php echo $ingredient['name']; ?>
-            </option>
-            <?php endforeach; ?>
-        </select>
-    </div>
-
-    <!-- Số lượng -->
-    <div class="form-group mr-3">
-        <label for="quantity_${variationIndex}">Số lượng</label>
-        <input type="number" class="form-control" name="variations[${variationIndex}][quantity]" placeholder="Nhập số lượng">
-    </div>
-
-    <!-- Nút xóa -->
-    <button type="button" class="btn btn-danger btn-sm remove-variation">Xóa</button>
+        row.innerHTML = `
+        <div class="form-group mr-3 mb-0">
+            <label for="ingredient_${ingredientIndex}">Tên nguyên liệu:</label>
+            <select class="form-control" name="ingredients[${ingredientIndex}][id]" required>
+                <option value="">Chọn nguyên liệu</option>
+                <?php foreach ($ingredients as $ingredient): ?>
+                <option value="<?php echo $ingredient['id']; ?>">
+                    <?php echo $ingredient['name']; ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="form-group mr-3 mb-0">
+            <label for="quantity_${ingredientIndex}">Số lượng</label>
+            <input type="number" class="form-control" name="ingredients[${ingredientIndex}][quantity]" required>
+        </div>
+        <button type="button" class="btn btn-danger btn-sm remove-ingredient mt-4">Xóa</button>
     `;
 
-            container.appendChild(row);
+        container.appendChild(row);
+        ingredientIndex++;
+    });
 
-            // Tăng index cho biến thể tiếp theo
-            variationIndex++;
-        });
-
-        document.getElementById('variations-container').addEventListener('click', function (e) {
-            if (e.target.classList.contains('remove-variation')) {
-                e.target.closest('.variation-row').remove();
-            }
-        });
+    // Xóa nguyên liệu
+    document.getElementById('ingredients-container').addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-ingredient')) {
+            e.target.closest('.ingredient-row').remove();
+        }
+    });
     </script>
 
     <script>
-        let mealIndex = 1;
+    let mealIndex = 1;
 
-        // Thêm bữa ăn
-        document.getElementById('add-meal').addEventListener('click', function () {
-            const container = document.getElementById('meals-container');
-            const row = document.createElement('div');
-            row.className = 'meal-row d-flex align-items-center mb-3';
+    // Thêm bữa ăn
+    document.getElementById('add-meal').addEventListener('click', function() {
+        const container = document.getElementById('meals-container');
+        const row = document.createElement('div');
+        row.className = 'meal-row d-flex align-items-center mb-3';
 
-            row.innerHTML = `
+        row.innerHTML = `
     <div class="form-group mr-3">
         <label for="meal_${mealIndex}">Tên bữa ăn:</label>
         <select class="form-control" name="meals[${mealIndex}][id]" required>
@@ -742,16 +745,16 @@ $recipe = $recipeModel->getDetailsById($id);
     <button type="button" class="btn btn-danger btn-sm remove-meal">Xóa</button>
     `;
 
-            container.appendChild(row);
-            mealIndex++;
-        });
+        container.appendChild(row);
+        mealIndex++;
+    });
 
-        // Xóa bữa ăn
-        document.getElementById('meals-container').addEventListener('click', function (e) {
-            if (e.target.classList.contains('remove-meal')) {
-                e.target.closest('.meal-row').remove();
-            }
-        });
+    // Xóa bữa ăn
+    document.getElementById('meals-container').addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-meal')) {
+            e.target.closest('.meal-row').remove();
+        }
+    });
     </script>
 
 
