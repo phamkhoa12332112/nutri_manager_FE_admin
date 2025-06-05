@@ -99,6 +99,12 @@ switch ($action) {
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         $ingredientController->showEditIngredientForm($id);
         break;
+
+    // Set Mood Form
+    case 'set_mood':
+        $id = isset($_GET['id']) ? $_GET['id'] : null;
+        $recipeController->showSetMoodForm($id);
+        break;
     default:
         echo "Page not found.";
         break;

@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ingredientData = $data['data'];
         $quantity = $ingredient['quantity'] ?? 1; // Lấy số lượng nguyên liệu
         $calories = $ingredientData['calories']; 
-        $totalCalories += $calories * $quantity;
+        $totalCalories += ($quantity/100) * $calories;
     }
 
     if (isset($_FILES['imageUrl']) && $_FILES['imageUrl']['error'] === UPLOAD_ERR_OK) {

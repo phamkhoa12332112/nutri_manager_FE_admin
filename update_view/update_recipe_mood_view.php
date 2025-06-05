@@ -1,3 +1,7 @@
+<?php
+$recipeModel = new RecipeModel();
+$recipe = $recipeModel->getDetailsById($id);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,7 +49,7 @@
             <div class="sidebar-logo">
                 <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
-                    <a href="order.php" class="logo">
+                    <a href="" class="logo">
                         <img src="assets/img/logo_muji.png" alt="navbar brand" class="navbar-brand" height="70" />
                     </a>
                     <div class="nav-toggle">
@@ -113,13 +117,14 @@
             </div>
         </div>
         <!-- End Sidebar -->
+
         <div class="main-panel">
             <div class="main-header">
                 <div class="main-header-logo">
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
                         <a href="index.html" class="logo">
-                            <img src="  assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand"
+                            <img src="/assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand"
                                 height="20" />
                         </a>
                         <div class="nav-toggle">
@@ -149,7 +154,7 @@
                                 <ul class="dropdown-menu dropdown-search animated fadeIn">
                                     <form class="navbar-left navbar-form nav-search">
                                         <div class="input-group">
-                                            <input type="text" placeholder="Search ..." class="form-control" />
+                                            <input type="text" placeholder="Search  ." class="form-control" />
                                         </div>
                                     </form>
                                 </ul>
@@ -172,7 +177,7 @@
                                             <div class="notif-center">
                                                 <a href="#">
                                                     <div class="notif-img">
-                                                        <img src="  assets/img/jm_denis.jpg" alt="Img Profile" />
+                                                        <img src="assets/img/jm_denis.jpg" alt="Img Profile" />
                                                     </div>
                                                     <div class="notif-content">
                                                         <span class="subject">Jimmy Denis</span>
@@ -182,7 +187,7 @@
                                                 </a>
                                                 <a href="#">
                                                     <div class="notif-img">
-                                                        <img src="  assets/img/chadengle.jpg" alt="Img Profile" />
+                                                        <img src="assets/img/chadengle.jpg" alt="Img Profile" />
                                                     </div>
                                                     <div class="notif-content">
                                                         <span class="subject">Chad</span>
@@ -192,19 +197,19 @@
                                                 </a>
                                                 <a href="#">
                                                     <div class="notif-img">
-                                                        <img src="  assets/img/mlane.jpg" alt="Img Profile" />
+                                                        <img src=" /assets/img/mlane.jpg" alt="Img Profile" />
                                                     </div>
                                                     <div class="notif-content">
                                                         <span class="subject">Jhon Doe</span>
                                                         <span class="block">
-                                                            Ready for the meeting today...
+                                                            Ready for the meeting today .
                                                         </span>
                                                         <span class="time">12 minutes ago</span>
                                                     </div>
                                                 </a>
                                                 <a href="#">
                                                     <div class="notif-img">
-                                                        <img src="  assets/img/talha.jpg" alt="Img Profile" />
+                                                        <img src="assets/img/talha.jpg" alt="Img Profile" />
                                                     </div>
                                                     <div class="notif-content">
                                                         <span class="subject">Talha</span>
@@ -259,7 +264,7 @@
                                                 </a>
                                                 <a href="#">
                                                     <div class="notif-img">
-                                                        <img src="  assets/img/profile2.jpg" alt="Img Profile" />
+                                                        <img src="assets/img/profile2.jpg" alt="Img Profile" />
                                                     </div>
                                                     <div class="notif-content">
                                                         <span class="block">
@@ -357,7 +362,7 @@
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                                     aria-expanded="false">
                                     <div class="avatar-sm">
-                                        <img src="  assets/img/khoa.jpg" alt="..." class="avatar-img rounded-circle" />
+                                        <img src="assets/img/khoa.jpg" alt=" ." class="avatar-img rounded-circle" />
                                     </div>
                                     <span class="profile-username">
                                         <span class="op-7">Hi,</span>
@@ -369,7 +374,7 @@
                                         <li>
                                             <div class="user-box">
                                                 <div class="avatar-lg">
-                                                    <img src="  assets/img/khoa.jpg" alt="image profile"
+                                                    <img src="assets/img/khoa.jpg" alt="image profile"
                                                         class="avatar-img rounded" />
                                                 </div>
                                                 <div class="u-text">
@@ -413,76 +418,85 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="index.php?action=recipes">Món ăn</a>
+                                <a href="user.php">Món ăn</a>
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
-                            <a href="index.php?action=add_recipe"><i style="color: green;" class="fas fa-plus">
-                                    Thêm</i></a>
+                            Chỉnh sửa
                             </li>
                         </ul>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="basic-datatables" class="display table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Mã món ăn</th>
-                                        <th>Tên món ăn</th>
-                                        <th>Mô tả</th>
-                                        <th>Tổng Calo</th>
-                                        <th>Ảnh</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>Mã món ăn</th>
-                                        <th>Tên món ăn</th>
-                                        <th>Mô tả</th>
-                                        <th>Tổng Calo</th>
-                                        <th>Ảnh</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    <?php if (is_array($recipes)): ?>
-                                    <ul>
-                                        <?php foreach ($recipes as $recipe): ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($recipe['id']) ?></td>
-                                            <td><?= htmlspecialchars($recipe['name']) ?></td>
-                                            <td><?= htmlspecialchars($recipe['description']) ?></td>
-                                            <td><?= htmlspecialchars($recipe['totalCalories']) ?></td>
-                                            <td>
-                                                <?php if (!empty($recipe['imageUrl'])): ?>
-                                                <img src="<?= htmlspecialchars($recipe['imageUrl']) ?>" alt="Ảnh món ăn"
-                                                    style="max-width: 80px; max-height: 80px;">
-                                                <?php endif; ?>
-                                            </td>
-                                            <td><a
-                                                    href="index.php?action=set_mood&id=<?php echo htmlspecialchars($recipe['id']) ?>"><i
-                                                        class="fas fa-cog"></i></a>
-                                                <a
-                                                    href="index.php?action=update_recipe&id=<?php echo htmlspecialchars($recipe['id']) ?>"><i
-                                                        class="fas fa-edit"></i></a>
-                                                <a
-                                                    href="./session/remove/remove_recipe.php?id=<?php echo $recipe['id'] ?>"><i
-                                                        style="color: red;" class="fas fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                    <?php else: ?>
-                                    <p>Không có dữ liệu.</p>
-                                </tbody>
-                            </table>
-                            <?php endif; ?>
-                        </div>
+                        <!-- filepath: /Applications/XAMPP/xamppfiles/htdocs/testPHP/admin/add_view/add_recipe_view.php -->
+                        <form method="POST" action="session/edit/edit_recipe_mood.php" enctype="multipart/form-data">
+                            <!-- ID món ăn (ẩn) -->
+                            <input type="hidden" name="id" value="<?php echo htmlspecialchars($recipe['id']); ?>">
+                            <input type="hidden" name="mealMoodJson" id="mealMoodJson">
+                            <!-- Tên món ăn -->
+                            <div class="form-group">
+                                <label for="name">Tên món ăn</label>
+                                <input type="text" id="name" class="form-control" name="name"
+                                    value="<?php echo htmlspecialchars($recipe['name']); ?>" readonly>
+                            </div>
+
+
+                            <div class="form-group mt-3">
+                                <label>Ảnh hiện tại</label><br>
+                                <?php if (!empty($recipe['imageUrl'])): ?>
+                                <img src="<?= htmlspecialchars($recipe['imageUrl']) ?>" alt="Ảnh món ăn"
+                                    style="max-width: 300; max-height: 300px;">
+                                <?php else: ?>
+                                Không có ảnh
+                                <?php endif; ?>
+                            </div>
+
+                            <div id="meal-mood-container">
+                                <?php if (!empty($recipeMoodMeals)): ?>
+                                <?php foreach ($recipeMoodMeals as $index => $item): ?>
+                                <div class="d-flex align-items-center mb-2 meal-mood-row">
+                                    <div class="form-group mr-3 mb-0">
+                                        <select class="form-control meal-select">
+                                            <option value="">Chọn bữa ăn</option>
+                                            <?php foreach ($recipeByIds['mealItems'] as $recipeById): ?>
+                                            <option value="<?php echo $recipeById['meal']['id']; ?>"
+                                                <?php echo $recipeById['meal']['id'] == $item['meal']['id'] ? 'selected' : ''; ?>>
+                                                <?php echo $recipeById['meal']['name']; ?>
+                                            </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mr-3 mb-0">
+                                        <select class="form-control mood-select">
+                                            <option value="">Chọn tâm trạng</option>
+                                            <?php foreach ($moods as $mood): ?>
+                                            <option value="<?php echo $mood['id']; ?>"
+                                                <?php echo $mood['id'] == $item['mood']['id'] ? 'selected' : ''; ?>>
+                                                <?php echo $mood['moodName']; ?>
+                                            </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <button type="button"
+                                        class="btn btn-danger btn-sm remove-meal-mood ml-2">Xoá</button>
+                                </div>
+                                <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
+                            <button type="button" id="add-meal-mood" class="btn btn-secondary btn-sm mt-2 mb-3">Thêm
+                                biến thể</button>
+
+
+                            <!-- Nút hành động -->
+                            <button type="submit" class="btn btn-primary mt-3">Cập nhật</button>
+                            <a href="index.php?action=recipes" class="btn btn-danger mt-3">Huỷ</a>
+                        </form>
                     </div>
+
                 </div>
             </div>
         </div>
-
+    </div>
     </div>
 
     <!-- Custom template | don't include it in your project! -->
@@ -549,18 +563,25 @@
     <!-- End Custom template -->
     </div>
     <!--   Core JS Files   -->
-    <script src="  assets/js/core/jquery-3.7.1.min.js"></script>
-    <script src="  assets/js/core/popper.min.js"></script>
-    <script src="  assets/js/core/bootstrap.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap Select JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
+
+    <script src="assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="assets/js/core/popper.min.js"></script>
+    <script src="assets/js/core/bootstrap.min.js"></script>
 
     <!-- jQuery Scrollbar -->
-    <script src="  assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+    <script src="assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
     <!-- Datatables -->
-    <script src="  assets/js/plugin/datatables/datatables.min.js"></script>
+    <script src="assets/js/plugin/datatables/datatables.min.js"></script>
     <!-- Kaiadmin JS -->
-    <script src="  assets/js/kaiadmin.min.js"></script>
+    <script src="assets/js/kaiadmin.min.js"></script>
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-    <script src="  assets/js/setting-demo2.js"></script>
+    <script src="assets/js/setting-demo2.js"></script>
     <script>
     $(document).ready(function() {
         $("#basic-datatables").DataTable({});
@@ -616,6 +637,63 @@
                 ]);
             $("#addRowModal").modal("hide");
         });
+    });
+    </script>
+
+    <script>
+    let mealMoodIndex = <?php echo isset($recipe['mealMoodItems']) ? count($recipe['mealMoodItems']) : 0; ?>;
+    $('#add-meal-mood').on('click', function() {
+        const meals = `
+        <select class="form-control meal-select">
+            <option value="">Chọn bữa ăn</option>
+            <?php foreach ($recipeByIds['mealItems'] as $recipeById): ?>
+            <option value="<?php echo $recipeById['meal']['id']; ?>"><?php echo $recipeById['meal']['name']; ?></option>
+            <?php endforeach; ?>
+        </select>
+    `;
+        const moods = `
+        <select class="form-control mood-select">
+            <option value="">Chọn tâm trạng</option>
+            <?php foreach ($moods as $mood): ?>
+            <option value="<?php echo $mood['id']; ?>"><?php echo $mood['moodName']; ?></option>
+            <?php endforeach; ?>
+            
+        </select>
+    `;
+        $('#meal-mood-container').append(`
+        <div class="d-flex align-items-center mb-2 meal-mood-row">
+            <div class="form-group mr-3 mb-0">${meals}</div>
+            <div class="form-group mr-3 mb-0">${moods}</div>
+            <button type="button" class="btn btn-danger btn-sm remove-meal-mood ml-2">Xoá</button>
+        </div>
+    `);
+        mealMoodIndex++;
+    });
+
+    // Xoá dòng biến thể
+    $('#meal-mood-container').on('click', '.remove-meal-mood', function() {
+        $(this).closest('.meal-mood-row').remove();
+    });
+    </script>
+    <script>
+    $('form').on('submit', function(e) {
+        var recipeId = $('input[name="id"]').val();
+        var data = [];
+        $('#meal-mood-container .meal-mood-row').each(function() {
+            var mealId = $(this).find('.meal-select').val();
+            var moodId = $(this).find('.mood-select').val();
+            if (mealId && moodId) {
+                data.push({
+                    mealId: parseInt(mealId),
+                    moodId: parseInt(moodId)
+                });
+            }
+        });
+        var json = JSON.stringify({
+            recipeId: parseInt(recipeId),
+            data: data
+        });
+        $('#mealMoodJson').val(json);
     });
     </script>
 </body>

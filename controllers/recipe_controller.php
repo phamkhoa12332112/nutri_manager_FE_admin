@@ -60,4 +60,26 @@ class RecipeController
 
         require __DIR__ . '/../update_view/update_recipe_view.php';
     }
+
+    public function showSetMoodForm($id)
+    {
+        $recipeModel = new RecipeModel();
+        $recipes = $recipeModel->getAllRecipes();
+        $recipeByIds = $recipeModel->getDetailsById($id);
+        $recipeMoodMeals = $recipeModel->getRecipeMood($id);
+
+        $userModel = new UserModel();
+        $users = $userModel->getAllUsers();
+
+        $mealModel = new MealModel();
+        $meals = $mealModel->getAllMeals();
+
+        $ingredientModel = new IngredientModel();
+        $ingredients = $ingredientModel->getAllIngredients();
+
+        $moodModel = new MoodModel();
+        $moods = $moodModel->getAllMoods();
+
+        require __DIR__ . '/../update_view/update_recipe_mood_view.php';
+    }
 }
